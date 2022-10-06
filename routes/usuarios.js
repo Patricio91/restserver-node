@@ -1,18 +1,32 @@
 
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { validarCampos } = require('../middlewares/validar-campos');
-const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
 
-const { usuariosGet,
-        usuariosPut,
-        usuariosPost,
-        usuariosDelete,
-        usuariosPatch } = require('../controllers/usuarios');
+const {
+    validarCampos,
+    validarjwt,
+    esAdmin,
+    poseeRol
+} = require("../middlewares");
+
+
+const {
+    esRoleValido, 
+    emailExiste, 
+    existeUsuarioPorId 
+} = require('../helpers/db-validators');
+
+const { 
+    usuariosGet,
+    usuariosPut,
+    usuariosPost,
+    usuariosDelete,
+    usuariosPatch 
+} = require('../controllers/usuarios');
 
 const router = Router();
 
-router.get('/', usuariosGet );
+router.get('/',usuariosGet );
 
 router.put('/:id',[
     check('id', 'No es un ID válido').isMongoId(),
@@ -31,7 +45,10 @@ router.post('/',[
 ], usuariosPost );
 
 router.delete('/:id',[
-    check('id', 'No es un ID válido').isMongoId(),
+    validarjwt,
+    // esAdmin,
+    poseeRol("ADMIN_ROLE", "VENTAS_ROLE", "USER_ROLE"),
+    check('id', 'No es ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     validarCampos
 ],usuariosDelete );
@@ -39,3 +56,4 @@ router.delete('/:id',[
 router.patch('/', usuariosPatch );
 
 module.exports = router;
+// El middleware "esAdmin" dice a fuerza que para pasar tiene que ser admin
