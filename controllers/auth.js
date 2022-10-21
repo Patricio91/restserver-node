@@ -53,9 +53,7 @@ const googleSignIn = async(req, res = response) => {
 
     try {
         const {correo, nombre, img} = await googleVerify(id_token);
-
         let usuario = await Usuario.findOne({correo});
-        console.log(await usuario);
 
         if (!usuario){
             //Crear user
@@ -66,7 +64,6 @@ const googleSignIn = async(req, res = response) => {
                 img,
                 google: true
             };
-
             usuario = new Usuario(data);
             await usuario.save();
         }
