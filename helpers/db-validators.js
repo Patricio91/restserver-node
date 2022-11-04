@@ -1,5 +1,5 @@
 const Role = require('../models/role');
-const {Usuario, Categoria} = require('../models');
+const {Usuario, Categoria, Producto} = require('../models');
 const mongoose = require("mongoose");
 
 const esRoleValido = async(rol = '') => {
@@ -26,16 +26,24 @@ const existeUsuarioPorId = async(id) => {
     }
 }
 
-// Validadores de categoria
+// Validador de categoria
 const existeCategoriaPorId = async(id) => {
-    // Verificar si es un Mongo ID Valido
+    // Verifica si es un ID de Mongo válido
     if (!mongoose.Types.ObjectId.isValid(id)) {
         throw new Error(`No es un id de Mongo válido`);
     }
-    
-    // Verificar si la categoria existe
+    // Verifica si la categoria existe
     const existeCategoria = await Categoria.findById(id);
     if ( !existeCategoria ) {
+        throw new Error(`El id no existe ${id}`);
+    }
+}
+
+//Validador de producto ID
+const existeProductoPorId = async(id) => {
+    // Verifica si el producto existe
+    const existeProducto = await Producto.findById(id);
+    if(!existeProducto) {
         throw new Error(`El id no existe ${id}`);
     }
 }
@@ -44,6 +52,7 @@ module.exports = {
     esRoleValido,
     emailExiste,
     existeUsuarioPorId,
-    existeCategoriaPorId
+    existeCategoriaPorId,
+    existeProductoPorId
 }
 
