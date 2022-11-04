@@ -1,22 +1,26 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const {
-    crearProducto,
-    obtenerProductos,
-    obtenerProducto,
-    actualizarProducto,
-    borrarProducto,
-} = require("../controllers/productos")
-
 const { 
     validarjwt, 
     validarCampos, 
     esAdmin
 } = require("../middlewares");
-const {existeProductoPorId, existeCategoriaPorId} = require("../helpers/db-validators");
-const router = require('./auth');
 
+const {
+    crearProducto,
+    obtenerProductos,
+    obtenerProducto,
+    actualizarProducto,
+    borrarProducto
+} = require("../controllers/productos")
+
+const {
+    existeProductoPorId, 
+    existeCategoriaPorId
+} = require("../helpers/db-validators");
+
+const router = Router();
 
 // GET - Obtener todos los productos
 router.get("/", obtenerProductos);
@@ -40,7 +44,7 @@ router.post("/", [
 // PUT - Actualizar registro
 router.put("/:id", [
     validarjwt,
-    check("categoria", "No es un ID de Mongo").isMongoId(),
+    //check("categoria", "No es un ID de Mongo").isMongoId(),
     check("id").custom(existeProductoPorId),
     validarCampos
 ],actualizarProducto);

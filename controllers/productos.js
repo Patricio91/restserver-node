@@ -1,13 +1,43 @@
 const { response, request } = require("express");
-const { body } = require("express-validator");
 const {Producto} = require("../models");
+const { body } = require("express-validator");
 const producto = require("../models/producto");
 
+
+//Obtener productos
+const obtenerProductos = async(req, res = response) => {
+    const {limite = 5, desde = 0} = req.query;
+    const query = {estado: true};
+
+    const [ total, productos] = await Promise.all([
+        Producto.countDocuments(query),
+        Producto.find(query)
+            .populate("usuario", "nombre")
+            .populate("categoria", "nombre")
+            .skip(Number(desde))
+            .limit(Number(limite))
+    ]);
+
+    res.json({
+        total,
+        productos
+    });
+}
+
+
+// Obtener producto
+const obtenerProducto = async(req, res = response) => {
+    const {id} = req.params;
+    const producto = await Producto.findById(id)
+        .populate("usuario", "nombre")
+        .populate("categoria", "nombre");
+    res.json(producto);
+}
 
 // Crear producto
 const crearProducto = async(req, res = response) => {
     const {estado, usuario, ...body} = req.body;
-    const productoDB = await Producto.findOne({nombre});
+    const productoDB = await Producto.findOne({nombre: body.nombre});
 
     if(productoDB){
         return res.status(400).json({
@@ -25,35 +55,6 @@ const crearProducto = async(req, res = response) => {
     // Guarda en DB
     await producto.save();
     res.status(201).json(producto)
-}
-
-//Obtener productos
-const obtenerProductos = async(req, res = response) => {
-    const {limite = 5, desde = 0} = req.query;
-    const query = {estado: true};
-
-    const [ total, productos] = await Promise.all([
-        Producto.countDocuments(query),
-        Producto.find(query)
-            .populate("usuario", "nombre")
-            .populate("categoria", "nombre")
-            .skip(Number(desde))
-            .limit(Number(limite))
-    ]);
-    res.json([
-        total,
-        productos
-    ]);
-}
-
-
-// Obtener producto
-const obtenerProducto = async(req, res = response) => {
-    const {id} = req.params;
-    const producto = await Producto.findById(id)
-        .populate("usuario", "nombre")
-        .populate("categoria", "nombre");
-    res.json(producto);
 }
 
 
