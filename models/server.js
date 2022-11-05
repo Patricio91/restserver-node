@@ -6,24 +6,20 @@ class Server {
     constructor() {
         this.app  = express();
         this.port = process.env.PORT;
-
         this.paths = {
             auth: "/api/auth",
             usuarios: "/api/usuarios",
             productos: "/api/productos",
             categorias: "/api/categorias"
         }
-
         //Connect to DB
         this.conectarDB();
-
         //Middlewares
         this.middlewares();
-
         //Routes
         this.routes();
     }
-
+    
     async conectarDB() {
         await dbConnection();
     }

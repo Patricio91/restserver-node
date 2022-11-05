@@ -22,6 +22,7 @@ const {
 
 const router = Router();
 
+// api/productos  -  api/productos/:id
 // GET - Obtener todos los productos
 router.get("/", obtenerProductos);
 

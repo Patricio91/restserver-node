@@ -10,12 +10,10 @@ const crearCategoria = async(req, res = response) => {
             msg: `La categoria ${categoriaDB.nombre} ya existe. Intente nuevamente`
         });
     }
-
     const data = {
         nombre,
         usuario: req.usuario._id
     }
-
     const categoria = new Categoria(data);
     await categoria.save();
     res.status(201).json(categoria);
@@ -50,10 +48,8 @@ const obtenerCategoria = async(req, res = response) => {
 const actualizarCategoria = async(req, res = response) => {
     const {id} = req.params;
     const {estado, usuario, ...data} = req.body;
-
     data.nombre = data.nombre.toUpperCase();
     data.usuario = req.usuario._id;
-
     const categoria = await Categoria.findByIdAndUpdate(id, data, {new: true});
     res.json(categoria);
 }

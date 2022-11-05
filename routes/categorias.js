@@ -12,13 +12,13 @@ const {
 const { 
     validarjwt, 
     validarCampos, 
-    esAdmin
+    esAdmin 
 } = require("../middlewares");
-const {existeCategoriaPorId} = require("../helpers/db-validators");
 
+const {existeCategoriaPorId} = require("../helpers/db-validators");
 const router = Router();
 
-// api/categorias
+// api/categorias  -  api/categorias/:id
 // GET - Obtener todas las categorias
 router.get("/", 
     obtenerCategorias

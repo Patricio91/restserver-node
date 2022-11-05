@@ -9,7 +9,6 @@ const {
     poseeRol
 } = require("../middlewares");
 
-
 const {
     esRoleValido, 
     emailExiste, 
