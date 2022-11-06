@@ -26,7 +26,6 @@ const buscar = (req, res = response) => {
             msg: `Las colecciones permitidas para utilizar son: ${coleccionesPermitidas}`
         })
     }
-
     switch (coleccion) {
         case "usuarios":
             buscarUsuarios(termino, res);
